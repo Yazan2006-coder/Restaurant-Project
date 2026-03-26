@@ -1,0 +1,23 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="64" height="64" fill="#FFE600" rx="8"/>
+  
+  <!-- Fries basket -->
+  <g transform="translate(32, 32)">
+    <!-- Fries -->
+    <rect x="-4" y="-16" width="3" height="20" fill="#D4AF37" rx="2"/>
+    <rect x="-1" y="-18" width="3" height="22" fill="#E6C200" rx="2"/>
+    <rect x="2" y="-16" width="3" height="20" fill="#D4AF37" rx="2"/>
+    
+    <!-- More fries -->
+    <rect x="-10" y="-12" width="3" height="16" fill="#E6C200" rx="2"/>
+    <rect x="-7" y="-14" width="3" height="18" fill="#D4AF37" rx="2"/>
+    <rect x="5" y="-14" width="3" height="18" fill="#E6C200" rx="2"/>
+    <rect x="8" y="-12" width="3" height="16" fill="#D4AF37" rx="2"/>
+    
+    <!-- Red packet/salt -->
+    <path d="M -14 2 L 14 2 L 12 8 L -12 8 Z" fill="#E63946" stroke="#0D0D0D" stroke-width="1"/>
+  </g>
+  
+  <!-- Text below can be added by CSS -->
+</svg>
