@@ -9,12 +9,12 @@
     <span>Kitchen Opens 12pm Daily</span>
     <span>The Signature Cut — Made Fresh to Order</span>
     <span>Dine In or Take Away</span>
-    <span>Crafted in Small Batches</span>
+    <span>Crafted in Big Batches</span>
     <span>One Fry. One Love</span>
     <span>Kitchen Opens 12pm Daily</span>
     <span>The Signature Cut — Made Fresh to Order</span>
     <span>Dine In or Take Away</span>
-    <span>Crafted in Small Batches</span>
+    <span>Crafted in Big Batches</span>
   </div>
 </div>
 
@@ -48,10 +48,10 @@
   <div class="hero-text">
     <span class="hero-eyebrow">Craft Fried Potatoes</span>
     <h1 class="hero-title">One Fry. <em>Always.</em></h1>
-    <p class="hero-desc">Hand-cut, small-batch fried potatoes. Every piece crafted with intention. No shortcuts. No compromises.</p>
+    <p class="hero-desc">Hand-cut, big-batch fried potatoes. Every piece crafted with intention. No shortcuts. No compromises.</p>
     <div class="hero-price">
       <span class="currency">From</span>
-      <span class="amount">€6.50</span>
+      <span class="amount">€5,-</span>
     </div>
     <a href="#menu" class="hero-order">Start Your Order</a>
   </div>
