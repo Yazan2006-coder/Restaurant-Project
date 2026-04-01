@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Controleer of de gebruiker is ingelogd en admin-rechten heeft
+// Controleert of de gebruiker is ingelogd en admin-rechten heeft
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();

@@ -19,8 +19,6 @@ $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 try {
     // Maak databaseverbinding
     $pdo = new PDO ($dsn, $user, $password, $opties);
-    // Succes! Verbinding tot stand gebracht
-    // echo "Verbinding succesvol!";
     
     // Maak gebruikerstabel als deze niet bestaat
     $pdo->exec("CREATE TABLE IF NOT EXISTS users (
@@ -39,21 +37,21 @@ try {
         $pdo->exec("ALTER TABLE Gerechten ADD COLUMN afbeelding VARCHAR(255) DEFAULT 'placeholder.jpg' AFTER beschrijving");
     };
     
-    // Controleer of admin-gebruiker bestaat, zo niet, maak er een
+    // Controleer of admin-gebruiker bestaat, als er geen bestaat wordt er een gemaakt
     $stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin' LIMIT 1");
     $stmt->execute();
     
     if ($stmt->rowCount() === 0) {
-        // Maak standaard admin-gebruiker aan (email: admin@fritandel.com, wachtwoord: admin123)
+        // admin-gebruiker inlog gegevens (email: admin@fritandel.com, wachtwoord: admin123)
         $admin_password = password_hash('admin123', PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'admin')");
         $stmt->execute(['Admin', 'admin@fritandel.com', $admin_password]);
     }
     
 } catch (PDOException $e) {
-    // Foutmelding
+    
     echo $e->getMessage();
-    // Stop (sterven)
+
     die("Sorry, databaseprobleem");
 }
 ?>

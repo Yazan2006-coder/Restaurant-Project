@@ -1,6 +1,4 @@
 <?php
-// Koptekst en Heloseite
-// Dit bestand bevat de header met navigatie en het hero-gedeelte
 ?>
 
 <!-- TICKER -->
