@@ -20,7 +20,7 @@
 
 <!-- HEADER -->
 <header>
-  <a href="index.php" class="logo">
+  <a href="fritandel.php" class="logo">
     <img src="logo.svg" alt="Fritandel" class="logo-icon">
     <div class="logo-text">
       <div class="name">Fritandel</div>
@@ -28,8 +28,8 @@
     </div>
   </a>
   <nav>
-    <a href="index.php">Menu</a>
-    <a href="fritandel.php">Browse All</a>
+    <a href="fritandel.php">Menu</a>
+    <a href="index.php">Browse All</a>
     <?php if (isset($_SESSION['user_id'])): ?>
       <?php if ($_SESSION['user_role'] === 'admin'): ?>
         <a href="admin.php" class="nav-link">Admin Panel</a>
@@ -53,7 +53,6 @@
       <span class="currency">From</span>
       <span class="amount">€5,-</span>
     </div>
-    <a href="#menu" class="hero-order">Start Your Order</a>
   </div>
   <div class="hero-visual">
     <img src="logo.jpg" alt="Fresh potatoes" class="hero-logo-img">

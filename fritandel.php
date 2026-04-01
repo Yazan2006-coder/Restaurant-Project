@@ -13,7 +13,7 @@ require_once "database.php";
 </head>
 <body>
 
-<?php require "header-hero.php"; ?>
+<?php require "header.php";?>
 
 <!-- MAIN -->
 <div class="page">

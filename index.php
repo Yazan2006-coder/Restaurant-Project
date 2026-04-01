@@ -171,15 +171,15 @@ $gerechten = $statement->fetchAll();
 </head>
 <body>
     <header>
-        <a href="index.php" class="logo">
+        <a href="fritandel.php" class="logo">
             <div class="logo-text">
                 <div class="name">Fritandel</div>
                 <div class="tagline">The Perfect Fry</div>
             </div>
         </a>
         <nav>
-            <a href="index.php" class="active">Menu</a>
-            <a href="fritandel.php">Browse All</a>
+            <a href="fritandel.php">Menu</a>
+            <a href="index.php">Browse All</a>
             <?php if (isset($_SESSION['user_id'])): ?>
                 <?php if ($_SESSION['user_role'] === 'admin'): ?>
                     <a href="admin.php" class="nav-link">Admin Panel</a>

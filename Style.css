@@ -89,7 +89,7 @@
 
   /* ── TABS ── */
   .menu-tabs { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-  .tab-btn { background: var(--warm-tan); color: var(--black); border: 2px solid var(--black); border-radius: 100px; padding: 10px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s; }
+  .tab-btn { background: var(--warm-tan); color: var(--black); border: none; outline: none; border-radius: 100px; padding: 10px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s; text-decoration: none; display: inline-block; }
   .tab-btn:hover, .tab-btn.active { background: var(--black); color: var(--yellow); }
 
   /* ── MENU GRID ── */
