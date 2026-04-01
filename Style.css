@@ -47,6 +47,7 @@
     position: sticky; top: 0; z-index: 300;
     border-bottom: 3px solid var(--black);
     animation: slideDown 0.5s ease forwards;
+    flex-wrap: wrap;
   }
   @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
 
@@ -137,10 +138,175 @@
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
 
+  /* ── TABLET RESPONSIVE (960px and below) ── */
   @media (max-width: 960px) {
+    header {
+      padding: 0 20px;
+      height: auto;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    
+    .logo {
+      gap: 10px;
+      flex: 0 0 auto;
+    }
+    
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .logo-text .name {
+      font-size: 1.5rem;
+    }
+    
+    nav {
+      flex: 1 1 100%;
+      gap: 8px;
+      justify-content: center;
+      padding: 12px 0;
+    }
+    
+    nav a, nav a.nav-link {
+      font-size: 0.55rem;
+      padding: 6px 12px;
+    }
+    
+    nav span {
+      flex-basis: 100%;
+      text-align: center;
+      font-size: 0.55rem;
+    }
+
     .hero { grid-template-columns: 1fr; }
     .hero-visual { display: none; }
-    .page { grid-template-columns: 1fr; }
-    nav a { display: none; }
-    .items-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-text { padding: 40px 30px; }
+    .hero-title { font-size: clamp(2.5rem, 5vw, 4rem); }
+    
+    .page { grid-template-columns: 1fr; padding: 30px 20px; }
+    .items-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .grid-wrap { padding: 16px; }
+    .s-card { padding: 20px; }
+  }
+
+  /* ── MOBILE RESPONSIVE (640px and below) ── */
+  @media (max-width: 640px) {
+    header {
+      padding: 10px 15px;
+      border-bottom: 2px solid var(--black);
+    }
+    
+    .logo {
+      gap: 8px;
+    }
+    
+    .logo-icon {
+      width: 45px;
+      height: 45px;
+    }
+    
+    .logo-text .name {
+      font-size: 1.2rem;
+    }
+    
+    .logo-text .tagline {
+      font-size: 0.4rem;
+    }
+    
+    nav {
+      gap: 6px;
+      padding: 10px 0;
+    }
+    
+    nav a, nav a.nav-link {
+      font-size: 0.52rem;
+      padding: 5px 10px;
+      border-width: 1px;
+    }
+    
+    nav span {
+      font-size: 0.52rem;
+      margin: 0 5px !important;
+    }
+
+    .hero-text { padding: 30px 20px; gap: 12px; }
+    .hero-eyebrow { font-size: 0.6rem; }
+    .hero-title { font-size: clamp(2rem, 4vw, 3rem); }
+    .hero-price .amount { font-size: 2rem; }
+    .hero-desc { font-size: 0.65rem; max-width: 100%; }
+
+    .page { padding: 20px 15px; gap: 20px; }
+    .items-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .item-card { border-radius: 8px; }
+    .item-thumb { height: 140px; }
+    .grid-wrap { padding: 12px; border-radius: 12px; }
+    .grid-title { font-size: 1rem; }
+    .grid-count { font-size: 0.55rem; }
+    
+    .s-card { padding: 16px; border-radius: 12px; }
+    .s-card h2 { font-size: 1.2rem; margin-bottom: 12px; }
+    
+    footer {
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px 15px;
+      text-align: center;
+    }
+    
+    .footer-logo { font-size: 1.2rem; }
+    .footer-copy { font-size: 0.52rem; }
+  }
+
+  /* ── EXTRA SMALL DEVICES (480px and below) ── */
+  @media (max-width: 480px) {
+    .ticker-inner span {
+      font-size: 0.85rem;
+      margin: 0 30px;
+    }
+    
+    header {
+      padding: 8px 12px;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .logo-text .name {
+      font-size: 1rem;
+    }
+    
+    nav {
+      gap: 4px;
+    }
+    
+    nav a, nav a.nav-link {
+      font-size: 0.5rem;
+      padding: 4px 8px;
+    }
+    
+    nav span {
+      font-size: 0.5rem;
+      margin: 0 3px !important;
+    }
+
+    .hero-text { padding: 25px 15px; gap: 10px; }
+    .hero-title { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+    .hero-price .amount { font-size: 1.5rem; }
+    .hero-desc { font-size: 0.6rem; }
+
+    .page { padding: 15px 12px; gap: 15px; }
+    .items-grid { grid-template-columns: 1fr; gap: 8px; }
+    .item-thumb { height: 150px; }
+    .grid-count { display: none; }
+    
+    .menu-tabs { gap: 8px; }
+    .tab-btn { padding: 8px 12px; font-size: 0.65rem; }
+    
+    .s-card { padding: 14px; }
+    .s-card h2 { font-size: 1rem; margin-bottom: 10px; }
+    .story-title { font-size: 1.1rem; }
+    .story-body { font-size: 0.62rem; }
   }
