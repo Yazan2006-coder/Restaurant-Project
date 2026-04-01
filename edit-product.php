@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Check if user is admin
+// Controleer of de gebruiker admin is
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
@@ -13,7 +13,7 @@ $error = '';
 $success = '';
 $product = null;
 
-// Fetch product
+// Haal het product op
 try {
     $sql = "SELECT * FROM Gerechten WHERE id = ?";
     $statement = $pdo->prepare($sql);
@@ -28,15 +28,15 @@ try {
     $error = 'Error fetching product: ' . $e->getMessage();
 }
 
-// Handle update
+// Verwerk update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $naam = isset($_POST['naam']) ? trim($_POST['naam']) : '';
     $beschrijving = isset($_POST['beschrijving']) ? trim($_POST['beschrijving']) : '';
     $categorie = isset($_POST['categorie']) ? trim($_POST['categorie']) : '';
     $prijs = isset($_POST['prijs']) ? floatval($_POST['prijs']) : 0;
-    $afbeelding = $product['afbeelding']; // Keep existing image by default
+    $afbeelding = $product['afbeelding']; // Bewaar standaard bestaande afbeelding
 
-    // Handle image upload
+    // Verwerk afbeeldingsupload
     if (isset($_FILES['afbeelding']) && $_FILES['afbeelding']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'images/products/';
         if (!is_dir($uploadDir)) {
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $uploadPath = $uploadDir . $newFileName;
 
             if (move_uploaded_file($_FILES['afbeelding']['tmp_name'], $uploadPath)) {
-                // Delete old image if it exists
+                // Verwijder oude afbeelding als deze bestaat
                 if ($product['afbeelding'] && $product['afbeelding'] !== 'placeholder.jpg') {
                     $oldImagePath = $uploadDir . $product['afbeelding'];
                     if (file_exists($oldImagePath)) {
@@ -61,15 +61,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $afbeelding = $newFileName;
             } else {
-                $error = 'Failed to upload image.';
+                $error = 'Afbeelding kan niet worden geüpload.';
             }
         } else {
-            $error = 'Invalid image format. Allowed: jpg, jpeg, png, gif, webp';
+            $error = 'Ongeldig afbeeldingsformaat. Ondersteund: jpg, jpeg, png, gif, webp';
         }
     }
 
     if (empty($naam) || empty($beschrijving) || empty($categorie) || $prijs <= 0) {
-        $error = 'Please fill in all fields with valid data.';
+        $error = 'Vul alle velden in met geldige gegevens.';
     } elseif (empty($error)) {
         try {
             $sql = "UPDATE Gerechten SET naam = ?, beschrijving = ?, afbeelding = ?, categorie = ?, prijs = ? WHERE id = ?";

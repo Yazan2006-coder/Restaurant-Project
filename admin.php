@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Check if user is logged in and is admin
+// Controleer of de gebruiker is ingelogd en admin-rechten heeft
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
@@ -11,19 +11,19 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 $success = '';
 $error = '';
 
-// Check if deletion was successful from delete-product.php
+// Controleer of het product succesvol is verwijderd vanuit delete-product.php
 if (isset($_GET['deleted']) && $_GET['deleted'] === '1') {
-    $success = 'Product deleted successfully!';
+    $success = 'Product is succesvol verwijderd!';
 }
 
-// Fetch all products
+// Haal alle producten op
 try {
     $sql = "SELECT * FROM Gerechten ORDER BY naam ASC";
     $statement = $pdo->prepare($sql);
     $statement->execute();
     $products = $statement->fetchAll();
 } catch (PDOException $e) {
-    $error = 'Error fetching products: ' . $e->getMessage();
+    $error = 'Fout bij ophalen producten: ' . $e->getMessage();
     $products = [];
 }
 ?>

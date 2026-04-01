@@ -1,5 +1,6 @@
 <?php
-// Menu Section - Fetch from database
+// Menusectie - Gegevens ophalen uit database
+// Haal de geselecteerde categorie op uit de URL-parameters
 $selectedCategory = $_GET['category'] ?? 'all';
 
 if ($selectedCategory === 'all') {

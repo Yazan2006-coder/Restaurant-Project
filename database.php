@@ -6,23 +6,23 @@ $user = "user";
 $password = "password";
 $charset = "utf8mb4";
 
-//opties voor PDO
+// PDO-opties voor foutafhandeling en gegevensopname
 $opties = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES => false,
 ];
 
-//dsn
+// DSN (Data Source Name) voor databaseverbinding
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 
 try {
-    //create connection
+    // Maak databaseverbinding
     $pdo = new PDO ($dsn, $user, $password, $opties);
-    //success melding
+    // Succes! Verbinding tot stand gebracht
     // echo "Verbinding succesvol!";
     
-    // Create users table if it doesn't exist
+    // Maak gebruikerstabel als deze niet bestaat
     $pdo->exec("CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
@@ -33,27 +33,27 @@ try {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     );");
     
-    // Add image column to Gerechten table if it doesn't exist
+    // Voeg afbeeldingskolom toe aan Gerechten-tabel als deze niet bestaat
     $result = $pdo->query("SHOW COLUMNS FROM Gerechten LIKE 'afbeelding'");
     if ($result->rowCount() === 0) {
         $pdo->exec("ALTER TABLE Gerechten ADD COLUMN afbeelding VARCHAR(255) DEFAULT 'placeholder.jpg' AFTER beschrijving");
     };
     
-    // Check if admin user exists, if not create one
+    // Controleer of admin-gebruiker bestaat, zo niet, maak er een
     $stmt = $pdo->prepare("SELECT id FROM users WHERE role = 'admin' LIMIT 1");
     $stmt->execute();
     
     if ($stmt->rowCount() === 0) {
-        // Create default admin user (email: admin@fritandel.com, password: admin123)
+        // Maak standaard admin-gebruiker aan (email: admin@fritandel.com, wachtwoord: admin123)
         $admin_password = password_hash('admin123', PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'admin')");
         $stmt->execute(['Admin', 'admin@fritandel.com', $admin_password]);
     }
     
 } catch (PDOException $e) {
-    //foutmelding
+    // Foutmelding
     echo $e->getMessage();
-    //stop (die)
-    die("Sorry, database probleem");
+    // Stop (sterven)
+    die("Sorry, databaseprobleem");
 }
 ?>

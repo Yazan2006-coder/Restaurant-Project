@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Redirect if already logged in
+// Omleiden indien al ingelogd
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
@@ -18,31 +18,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password_confirm = isset($_POST['password_confirm']) ? $_POST['password_confirm'] : '';
     
     if (empty($name) || empty($email) || empty($password) || empty($password_confirm)) {
-        $error = 'Please fill in all fields.';
+        $error = 'Vul alle velden in.';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Please enter a valid email address.';
+        $error = 'Voer een geldig e-mailadres in.';
     } elseif (strlen($password) < 6) {
-        $error = 'Password must be at least 6 characters long.';
+        $error = 'Wachtwoord moet minstens 6 tekens lang zijn.';
     } elseif ($password !== $password_confirm) {
-        $error = 'Passwords do not match.';
+        $error = 'Wachtwoorden komen niet overeen.';
     } else {
         try {
-            // Check if email already exists
+            // Controleer of e-mail al bestaat
             $sql = "SELECT id FROM users WHERE email = ?";
             $statement = $pdo->prepare($sql);
             $statement->execute([$email]);
             
             if ($statement->rowCount() > 0) {
-                $error = 'This email is already registered.';
+                $error = 'Dit e-mailadres is al geregistreerd.';
             } else {
-                // Create new user
+                // Maak nieuwe gebruiker aan
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 $sql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, 'user')";
                 $statement = $pdo->prepare($sql);
                 $statement->execute([$name, $email, $hashed_password]);
 
-                $success = 'Account created successfully! Please log in.';
-                // Redirect after 2 seconds
+                $success = 'Account succesvol aangemaakt! Meld u aan.';
+                // Redirect na 2 seconden
                 header("Refresh: 2; url=login.php");
             }
         } catch (PDOException $e) {

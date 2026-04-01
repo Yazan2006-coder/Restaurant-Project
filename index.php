@@ -2,16 +2,16 @@
 session_start();
 require_once "database.php";
 
-// Get search query from form
+// Haal de zoekopdracht op uit het formulier
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-// Build SQL query with search
+// Bouw de SQL-query met zoekopdracht
 $sql = "SELECT * FROM Gerechten";
 if (!empty($searchQuery)) {
     $sql .= " WHERE naam LIKE ? OR categorie LIKE ? OR beschrijving LIKE ?";
 }
 
-// Prepare and execute statement
+// Bereid het statement voor en voer het uit
 $statement = $pdo->prepare($sql);
 
 if (!empty($searchQuery)) {
@@ -21,7 +21,7 @@ if (!empty($searchQuery)) {
     $statement->execute();
 }
 
-// Fetch data
+// Haal alle gegevens op
 $gerechten = $statement->fetchAll();
 ?>
 

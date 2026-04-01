@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Check if user is admin
+// Controleer of de gebruiker admin is
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prijs = isset($_POST['prijs']) ? floatval($_POST['prijs']) : 0;
     $afbeelding = '';
 
-    // Handle image upload
+    // Verwerk de afbeeldingsupload
     if (isset($_FILES['afbeelding']) && $_FILES['afbeelding']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'images/products/';
         if (!is_dir($uploadDir)) {
@@ -36,23 +36,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (move_uploaded_file($_FILES['afbeelding']['tmp_name'], $uploadPath)) {
                 $afbeelding = $newFileName;
             } else {
-                $error = 'Failed to upload image.';
+                $error = 'Afbeelding kan niet worden geüpload.';
             }
         } else {
-            $error = 'Invalid image format. Allowed: jpg, jpeg, png, gif, webp';
+            $error = 'Ongeldig afbeeldingsformaat. Ondersteund: jpg, jpeg, png, gif, webp';
         }
     }
 
     if (empty($naam) || empty($beschrijving) || empty($categorie) || $prijs <= 0) {
-        $error = 'Please fill in all product fields with valid data.';
+        $error = 'Vul alle productgegevens in met geldige gegevens.';;
     } elseif (empty($error)) {
         try {
             $sql = "INSERT INTO Gerechten (naam, beschrijving, afbeelding, categorie, prijs) VALUES (?, ?, ?, ?, ?)";
             $statement = $pdo->prepare($sql);
             $statement->execute([$naam, $beschrijving, $afbeelding ?: 'placeholder.jpg', $categorie, $prijs]);
             
-            $success = 'Product added successfully!';
-            // Redirect after 2 seconds
+            $success = 'Product is succesvol toegevoegd!';
+            // Redirect na 2 seconden
             header("Refresh: 2; url=admin.php");
         } catch (PDOException $e) {
             $error = 'Error adding product: ' . $e->getMessage();
