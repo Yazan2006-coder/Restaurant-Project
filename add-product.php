@@ -16,16 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $beschrijving = isset($_POST['beschrijving']) ? trim($_POST['beschrijving']) : '';
     $categorie = isset($_POST['categorie']) ? trim($_POST['categorie']) : '';
     $prijs = isset($_POST['prijs']) ? floatval($_POST['prijs']) : 0;
-    $afbeelding = '';
+    $image = '';
 
     // Verwerk de afbeeldingsupload
-    if (isset($_FILES['afbeelding']) && $_FILES['afbeelding']['error'] === UPLOAD_ERR_OK) {
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'images/products/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
 
-        $fileName = basename($_FILES['afbeelding']['name']);
+        $fileName = basename($_FILES['image']['name']);
         $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
         $allowedExt = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
@@ -33,8 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newFileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $naam) . '.' . $fileExt;
             $uploadPath = $uploadDir . $newFileName;
 
-            if (move_uploaded_file($_FILES['afbeelding']['tmp_name'], $uploadPath)) {
-                $afbeelding = $newFileName;
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+                $image = $newFileName;
             } else {
                 $error = 'Afbeelding kan niet worden geüpload.';
             }
@@ -47,9 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Vul alle productgegevens in met geldige gegevens.';;
     } elseif (empty($error)) {
         try {
-            $sql = "INSERT INTO Gerechten (naam, beschrijving, afbeelding, categorie, prijs) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO Gerechten (naam, beschrijving, image, categorie, prijs) VALUES (?, ?, ?, ?, ?)";
             $statement = $pdo->prepare($sql);
-            $statement->execute([$naam, $beschrijving, $afbeelding ?: 'placeholder.jpg', $categorie, $prijs]);
+            $statement->execute([$naam, $beschrijving, $image ?: 'placeholder.jpg', $categorie, $prijs]);
             
             $success = 'Product is succesvol toegevoegd!';
             // Redirect na 2 seconden
@@ -261,8 +261,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="form-group">
-                <label for="afbeelding">Product Image</label>
-                <input type="file" id="afbeelding" name="afbeelding" accept="image/jpeg,image/png,image/gif,image/webp">
+                <label for="image">Product Image</label>
+                <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/gif,image/webp">
                 <small style="color: var(--grey); display: block; margin-top: 5px;">Allowed: JPG, PNG, GIF, WebP (Optional)</small>
             </div>
 

@@ -280,8 +280,8 @@ try {
                     <div class="product-card">
                         <div style="height: 150px; background: #f0f0f0; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid var(--black);">
                             <?php 
-                              $imagePath = 'images/products/' . htmlspecialchars($product['afbeelding'] ?? 'placeholder.jpg');
-                              if (file_exists($imagePath) && !empty($product['afbeelding'])) {
+                              $imagePath = 'images/products/' . htmlspecialchars($product['image'] ?? 'placeholder.jpg');
+                              if (file_exists($imagePath) && !empty($product['image'])) {
                                 echo '<img src="' . $imagePath . '" alt="' . htmlspecialchars($product['naam']) . '" style="width: 100%; height: 100%; object-fit: cover;">';
                               } else {
                                 echo '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem;">🍟</div>';

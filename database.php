@@ -32,9 +32,9 @@ try {
     );");
     
     // Voeg afbeeldingskolom toe aan Gerechten-tabel als deze niet bestaat
-    $result = $pdo->query("SHOW COLUMNS FROM Gerechten LIKE 'afbeelding'");
+    $result = $pdo->query("SHOW COLUMNS FROM Gerechten LIKE 'image'");
     if ($result->rowCount() === 0) {
-        $pdo->exec("ALTER TABLE Gerechten ADD COLUMN afbeelding VARCHAR(255) DEFAULT 'placeholder.jpg' AFTER beschrijving");
+        $pdo->exec("ALTER TABLE Gerechten ADD COLUMN image VARCHAR(255) DEFAULT 'placeholder.jpg' AFTER beschrijving");
     };
     
     // Controleer of admin-gebruiker bestaat, als er geen bestaat wordt er een gemaakt

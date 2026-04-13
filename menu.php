@@ -32,8 +32,8 @@ $menuItems = $statement->fetchAll();
       <div class="item-card">
         <div class="item-thumb">
           <?php 
-            $imagePath = 'images/products/' . htmlspecialchars($item['afbeelding'] ?? 'placeholder.jpg');
-            if (file_exists($imagePath) && !empty($item['afbeelding'])) {
+            $imagePath = 'images/products/' . htmlspecialchars($item['image'] ?? 'placeholder.jpg');
+            if (file_exists($imagePath) && !empty($item['image'])) {
               echo '<img src="' . $imagePath . '" alt="' . htmlspecialchars($item['naam']) . '" style="width: 100%; height: 100%; object-fit: cover;">';
             } else {
               echo '🍟';

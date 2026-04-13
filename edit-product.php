@@ -34,16 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $beschrijving = isset($_POST['beschrijving']) ? trim($_POST['beschrijving']) : '';
     $categorie = isset($_POST['categorie']) ? trim($_POST['categorie']) : '';
     $prijs = isset($_POST['prijs']) ? floatval($_POST['prijs']) : 0;
-    $afbeelding = $product['afbeelding']; // Bewaar standaard bestaande afbeelding
+    $image = $product['image']; // Bewaar standaard bestaande afbeelding
 
     // Verwerk afbeeldingsupload
-    if (isset($_FILES['afbeelding']) && $_FILES['afbeelding']['error'] === UPLOAD_ERR_OK) {
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'images/products/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
 
-        $fileName = basename($_FILES['afbeelding']['name']);
+        $fileName = basename($_FILES['image']['name']);
         $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
         $allowedExt = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
@@ -51,15 +51,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newFileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $naam) . '.' . $fileExt;
             $uploadPath = $uploadDir . $newFileName;
 
-            if (move_uploaded_file($_FILES['afbeelding']['tmp_name'], $uploadPath)) {
+            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
                 // Verwijder oude afbeelding als deze bestaat
-                if ($product['afbeelding'] && $product['afbeelding'] !== 'placeholder.jpg') {
-                    $oldImagePath = $uploadDir . $product['afbeelding'];
+                if ($product['image'] && $product['image'] !== 'placeholder.jpg') {
+                    $oldImagePath = $uploadDir . $product['image'];
                     if (file_exists($oldImagePath)) {
                         unlink($oldImagePath);
                     }
                 }
-                $afbeelding = $newFileName;
+                $image = $newFileName;
             } else {
                 $error = 'Afbeelding kan niet worden geüpload.';
             }
@@ -72,12 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Vul alle velden in met geldige gegevens.';
     } elseif (empty($error)) {
         try {
-            $sql = "UPDATE Gerechten SET naam = ?, beschrijving = ?, afbeelding = ?, categorie = ?, prijs = ? WHERE id = ?";
+            $sql = "UPDATE Gerechten SET naam = ?, beschrijving = ?, image = ?, categorie = ?, prijs = ? WHERE id = ?";
             $statement = $pdo->prepare($sql);
-            $statement->execute([$naam, $beschrijving, $afbeelding, $categorie, $prijs, $product_id]);
+            $statement->execute([$naam, $beschrijving, $image, $categorie, $prijs, $product_id]);
             
             $success = 'Product updated successfully!';
-            $product = compact('id', 'naam', 'beschrijving', 'afbeelding', 'categorie', 'prijs');
+            $product = compact('id', 'naam', 'beschrijving', 'image', 'categorie', 'prijs');
         } catch (PDOException $e) {
             $error = 'Error updating product: ' . $e->getMessage();
         }
@@ -286,17 +286,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label for="afbeelding">Product Image</label>
+                    <label for="image">Product Image</label>
                     <?php 
-                        $imagePath = 'images/products/' . htmlspecialchars($product['afbeelding'] ?? 'placeholder.jpg');
-                        if (file_exists($imagePath) && $product['afbeelding'] && $product['afbeelding'] !== 'placeholder.jpg'):
+                        $imagePath = 'images/products/' . htmlspecialchars($product['image'] ?? 'placeholder.jpg');
+                        if (file_exists($imagePath) && $product['image'] && $product['image'] !== 'placeholder.jpg'):
                     ?>
                         <div style="margin-bottom: 10px;">
                             <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($product['naam']); ?>" style="max-width: 150px; max-height: 150px; border-radius: 8px; border: 2px solid var(--yellow);">
                             <p style="margin-top: 5px; font-size: 0.85rem; color: var(--grey);">Current image</p>
                         </div>
                     <?php endif; ?>
-                    <input type="file" id="afbeelding" name="afbeelding" accept="image/jpeg,image/png,image/gif,image/webp">
+                    <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/gif,image/webp">
                     <small style="color: var(--grey); display: block; margin-top: 5px;">Upload new image (Optional)</small>
                 </div>
                     <select id="categorie" name="categorie" required>
