@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Controleer of de gebruiker admin is
+// Check if user is admin
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
@@ -13,9 +13,9 @@ $error = '';
 $success = '';
 $product = null;
 
-// Haal het product op
+// Fetch product
 try {
-    $sql = "SELECT * FROM Gerechten WHERE id = ?";
+    $sql = "SELECT id, naam, beschrijving, afbeelding, categorie, prijs FROM Gerechten WHERE id = ?";
     $statement = $pdo->prepare($sql);
     $statement->execute([$product_id]);
     $product = $statement->fetch();
@@ -25,25 +25,25 @@ try {
         exit();
     }
 } catch (PDOException $e) {
-    $error = 'Error fetching product: ' . $e->getMessage();
+    $error = 'Er is iets misgegaan bij het ophalen van het product.';
 }
 
-// Verwerk update
+// Handle update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $naam = isset($_POST['naam']) ? trim($_POST['naam']) : '';
     $beschrijving = isset($_POST['beschrijving']) ? trim($_POST['beschrijving']) : '';
     $categorie = isset($_POST['categorie']) ? trim($_POST['categorie']) : '';
     $prijs = isset($_POST['prijs']) ? floatval($_POST['prijs']) : 0;
-    $image = $product['image']; // Bewaar standaard bestaande afbeelding
+    $afbeelding = $product['afbeelding']; // Keep existing image by default
 
-    // Verwerk afbeeldingsupload
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    // Handle image upload
+    if (isset($_FILES['afbeelding']) && $_FILES['afbeelding']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = 'images/products/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
 
-        $fileName = basename($_FILES['image']['name']);
+        $fileName = basename($_FILES['afbeelding']['name']);
         $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
         $allowedExt = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
@@ -51,35 +51,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newFileName = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $naam) . '.' . $fileExt;
             $uploadPath = $uploadDir . $newFileName;
 
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-                // Verwijder oude afbeelding als deze bestaat
-                if ($product['image'] && $product['image'] !== 'placeholder.jpg') {
-                    $oldImagePath = $uploadDir . $product['image'];
+            if (move_uploaded_file($_FILES['afbeelding']['tmp_name'], $uploadPath)) {
+                // Delete old image if it exists
+                if ($product['afbeelding'] && $product['afbeelding'] !== 'placeholder.jpg') {
+                    $oldImagePath = $uploadDir . $product['afbeelding'];
                     if (file_exists($oldImagePath)) {
                         unlink($oldImagePath);
                     }
                 }
-                $image = $newFileName;
+                $afbeelding = $newFileName;
             } else {
-                $error = 'Afbeelding kan niet worden geüpload.';
+                $error = 'Failed to upload image.';
             }
         } else {
-            $error = 'Ongeldig afbeeldingsformaat. Ondersteund: jpg, jpeg, png, gif, webp';
+            $error = 'Invalid image format. Allowed: jpg, jpeg, png, gif, webp';
         }
     }
 
     if (empty($naam) || empty($beschrijving) || empty($categorie) || $prijs <= 0) {
-        $error = 'Vul alle velden in met geldige gegevens.';
+        $error = 'Please fill in all fields with valid data.';
     } elseif (empty($error)) {
         try {
-            $sql = "UPDATE Gerechten SET naam = ?, beschrijving = ?, image = ?, categorie = ?, prijs = ? WHERE id = ?";
+            $sql = "UPDATE Gerechten SET naam = ?, beschrijving = ?, afbeelding = ?, categorie = ?, prijs = ? WHERE id = ?";
             $statement = $pdo->prepare($sql);
-            $statement->execute([$naam, $beschrijving, $image, $categorie, $prijs, $product_id]);
+            $statement->execute([$naam, $beschrijving, $afbeelding, $categorie, $prijs, $product_id]);
             
             $success = 'Product updated successfully!';
-            $product = compact('id', 'naam', 'beschrijving', 'image', 'categorie', 'prijs');
+            $product['naam'] = $naam;
+            $product['beschrijving'] = $beschrijving;
+            $product['afbeelding'] = $afbeelding;
+            $product['categorie'] = $categorie;
+            $product['prijs'] = $prijs;
         } catch (PDOException $e) {
-            $error = 'Error updating product: ' . $e->getMessage();
+            $error = 'Er is iets misgegaan bij het bijwerken van het product.';
         }
     }
 }
@@ -286,17 +290,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="form-group">
-                    <label for="image">Product Image</label>
+                    <label for="afbeelding">Product Image</label>
                     <?php 
-                        $imagePath = 'images/products/' . htmlspecialchars($product['image'] ?? 'placeholder.jpg');
-                        if (file_exists($imagePath) && $product['image'] && $product['image'] !== 'placeholder.jpg'):
+                        $imagePath = 'images/products/' . htmlspecialchars($product['afbeelding'] ?? 'placeholder.jpg');
+                        if (file_exists($imagePath) && $product['afbeelding'] && $product['afbeelding'] !== 'placeholder.jpg'):
                     ?>
                         <div style="margin-bottom: 10px;">
                             <img src="<?php echo $imagePath; ?>" alt="<?php echo htmlspecialchars($product['naam']); ?>" style="max-width: 150px; max-height: 150px; border-radius: 8px; border: 2px solid var(--yellow);">
                             <p style="margin-top: 5px; font-size: 0.85rem; color: var(--grey);">Current image</p>
                         </div>
                     <?php endif; ?>
-                    <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/gif,image/webp">
+                    <input type="file" id="afbeelding" name="afbeelding" accept="image/jpeg,image/png,image/gif,image/webp">
                     <small style="color: var(--grey); display: block; margin-top: 5px;">Upload new image (Optional)</small>
                 </div>
                     <select id="categorie" name="categorie" required>

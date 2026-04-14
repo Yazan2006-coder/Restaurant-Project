@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Controleert of de gebruiker is ingelogd en admin-rechten heeft
+// Check if user is logged in and is admin
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
@@ -14,11 +14,11 @@ $error = '';
 $product = null;
 
 if ($product_id <= 0) {
-    $error = 'Ongeldig product-ID';
+    $error = 'Invalid product ID';
 } else {
-    // Haal het product op om bevestiging weer te geven
+    // Fetch the product to show confirmation
     try {
-        $sql = "SELECT * FROM Gerechten WHERE id = ?";
+        $sql = "SELECT id, naam, beschrijving, afbeelding, categorie, prijs FROM Gerechten WHERE id = ?";
         $statement = $pdo->prepare($sql);
         $statement->execute([$product_id]);
         $product = $statement->fetch();
@@ -27,11 +27,11 @@ if ($product_id <= 0) {
             $error = 'Product not found';
         }
     } catch (PDOException $e) {
-        $error = 'Error fetching product: ' . $e->getMessage();
+        $error = 'Er is iets misgegaan bij het ophalen van het product.';
     }
 }
 
-// Verwerk werkelijke verwijdering
+// Handle actual deletion
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
     if ($product_id > 0) {
         try {
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
             header("Location: admin.php?deleted=1");
             exit();
         } catch (PDOException $e) {
-            $error = 'Fout bij ophalen product: ' . $e->getMessage();
+            $error = 'Er is iets misgegaan bij het verwijderen van het product.';
         }
     }
 }

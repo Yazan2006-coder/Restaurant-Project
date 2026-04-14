@@ -1,13 +1,13 @@
 <?php
-
+// Menu Section - Fetch from database
 $selectedCategory = $_GET['category'] ?? 'all';
 
 if ($selectedCategory === 'all') {
-    $sql = "SELECT * FROM Gerechten ORDER BY naam ASC";
+    $sql = "SELECT id, naam, beschrijving, afbeelding, categorie, prijs FROM Gerechten ORDER BY naam ASC";
     $statement = $pdo->prepare($sql);
     $statement->execute();
 } else {
-    $sql = "SELECT * FROM Gerechten WHERE categorie = ? ORDER BY naam ASC";
+    $sql = "SELECT id, naam, beschrijving, afbeelding, categorie, prijs FROM Gerechten WHERE categorie = ? ORDER BY naam ASC";
     $statement = $pdo->prepare($sql);
     $statement->execute([$selectedCategory]);
 }
@@ -32,8 +32,8 @@ $menuItems = $statement->fetchAll();
       <div class="item-card">
         <div class="item-thumb">
           <?php 
-            $imagePath = 'images/products/' . htmlspecialchars($item['image'] ?? 'placeholder.jpg');
-            if (file_exists($imagePath) && !empty($item['image'])) {
+            $imagePath = 'images/products/' . htmlspecialchars($item['afbeelding'] ?? 'placeholder.jpg');
+            if (file_exists($imagePath) && !empty($item['afbeelding'])) {
               echo '<img src="' . $imagePath . '" alt="' . htmlspecialchars($item['naam']) . '" style="width: 100%; height: 100%; object-fit: cover;">';
             } else {
               echo '🍟';

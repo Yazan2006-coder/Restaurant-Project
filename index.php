@@ -2,16 +2,16 @@
 session_start();
 require_once "database.php";
 
-// Haal de zoekopdracht op uit het formulier
+// Get search query from form
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-// Bouw de SQL-query met zoekopdracht
-$sql = "SELECT * FROM Gerechten";
+// Build SQL query with search
+$sql = "SELECT id, naam, beschrijving, afbeelding, categorie, prijs FROM Gerechten";
 if (!empty($searchQuery)) {
     $sql .= " WHERE naam LIKE ? OR categorie LIKE ? OR beschrijving LIKE ?";
 }
 
-// Bereid het statement voor en voer het uit
+// Prepare and execute statement
 $statement = $pdo->prepare($sql);
 
 if (!empty($searchQuery)) {
@@ -21,7 +21,7 @@ if (!empty($searchQuery)) {
     $statement->execute();
 }
 
-// Haal alle gegevens op
+// Fetch data
 $gerechten = $statement->fetchAll();
 ?>
 
@@ -224,8 +224,8 @@ $gerechten = $statement->fetchAll();
                     <div class="dish-card">
                         <div class="dish-image">
                             <?php 
-                              $imagePath = 'images/products/' . htmlspecialchars($dish['image'] ?? 'placeholder.jpg');
-                              if (file_exists($imagePath) && !empty($dish['image'])) {
+                              $imagePath = 'images/products/' . htmlspecialchars($dish['afbeelding'] ?? 'placeholder.jpg');
+                              if (file_exists($imagePath) && !empty($dish['afbeelding'])) {
                                 echo '<img src="' . $imagePath . '" alt="' . htmlspecialchars($dish['naam']) . '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">';
                               } else {
                                 echo '🍟';

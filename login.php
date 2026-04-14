@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Omleiden indien al ingelogd
+// Redirect if already logged in
 if (isset($_SESSION['user_id'])) {
     $role = $_SESSION['user_role'] ?? 'user';
     if ($role === 'admin') {
@@ -22,15 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $login_type = isset($_POST['login_type']) ? $_POST['login_type'] : 'user';
 
     if (empty($email) || empty($password)) {
-        $error = 'Vul alle velden in.';;
+        $error = 'Please fill in all fields.';
     } else {
         try {
             if ($login_type === 'admin') {
-                // Admin-aanmelding
-                $sql = "SELECT * FROM users WHERE email = ? AND role = 'admin'";
+                // Admin login
+                $sql = "SELECT id, name, email, password, role FROM users WHERE email = ? AND role = 'admin'";
             } else {
-                // Gebruikersaanmelding
-                $sql = "SELECT * FROM users WHERE email = ? AND role = 'user'";
+                // User login
+                $sql = "SELECT id, name, email, password, role FROM users WHERE email = ? AND role = 'user'";
             }
             
             $statement = $pdo->prepare($sql);
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $statement->fetch();
 
             if ($user && password_verify($password, $user['password'])) {
-                // Aanmelding succesvol
+                // Login successful
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['user_email'] = $user['email'];
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $error = 'Invalid email or password.';
             }
         } catch (PDOException $e) {
-            $error = 'Database error: ' . $e->getMessage();
+            $error = 'Er is iets misgegaan. Probeer het opnieuw.';
         }
     }
 }

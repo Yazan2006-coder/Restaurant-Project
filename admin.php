@@ -2,7 +2,7 @@
 require_once "database.php";
 session_start();
 
-// Controleer of de gebruiker is ingelogd en admin-rechten heeft
+// Check if user is logged in and is admin
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
@@ -11,19 +11,19 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 $success = '';
 $error = '';
 
-// Controleer of het product succesvol is verwijderd vanuit delete-product.php
+// Check if deletion was successful from delete-product.php
 if (isset($_GET['deleted']) && $_GET['deleted'] === '1') {
-    $success = 'Product is succesvol verwijderd!';
+    $success = 'Product deleted successfully!';
 }
 
-// Haal alle producten op
+// Fetch all products
 try {
-    $sql = "SELECT * FROM Gerechten ORDER BY naam ASC";
+    $sql = "SELECT id, naam, beschrijving, afbeelding, categorie, prijs FROM Gerechten ORDER BY naam ASC";
     $statement = $pdo->prepare($sql);
     $statement->execute();
     $products = $statement->fetchAll();
 } catch (PDOException $e) {
-    $error = 'Fout bij ophalen producten: ' . $e->getMessage();
+    $error = 'Er is iets misgegaan bij het ophalen van de producten.';
     $products = [];
 }
 ?>
@@ -280,8 +280,8 @@ try {
                     <div class="product-card">
                         <div style="height: 150px; background: #f0f0f0; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid var(--black);">
                             <?php 
-                              $imagePath = 'images/products/' . htmlspecialchars($product['image'] ?? 'placeholder.jpg');
-                              if (file_exists($imagePath) && !empty($product['image'])) {
+                              $imagePath = 'images/products/' . htmlspecialchars($product['afbeelding'] ?? 'placeholder.jpg');
+                              if (file_exists($imagePath) && !empty($product['afbeelding'])) {
                                 echo '<img src="' . $imagePath . '" alt="' . htmlspecialchars($product['naam']) . '" style="width: 100%; height: 100%; object-fit: cover;">';
                               } else {
                                 echo '<div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem;">🍟</div>';
